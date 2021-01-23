@@ -48,9 +48,9 @@ public class MyRestConfig {
     @Bean
     public IRule iRule() {
         //随机
-        IRule iRule = new RandomRule();
+        //IRule iRule = new RandomRule();
         //轮询
-        //IRule iRule = new ZoneAvoidanceRule();
+        IRule iRule = new ZoneAvoidanceRule();
         return iRule;
 
     }

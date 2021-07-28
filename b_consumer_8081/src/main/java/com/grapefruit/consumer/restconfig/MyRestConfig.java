@@ -1,14 +1,18 @@
-package com.grapefruit.b.configuration;
+package com.grapefruit.consumer.restconfig;
 
-import com.netflix.loadbalancer.IRule;
-import com.netflix.loadbalancer.RandomRule;
-import com.netflix.loadbalancer.ZoneAvoidanceRule;
+import com.netflix.client.config.CommonClientConfigKey;
+import com.netflix.client.config.DefaultClientConfigImpl;
+import com.netflix.client.config.IClientConfig;
+import feign.Request;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 柚子苦瓜茶
@@ -33,25 +37,24 @@ public class MyRestConfig {
 
         SimpleClientHttpRequestFactory simpleClientHttpRequestFactory = new SimpleClientHttpRequestFactory();
         /**
-         * 设置连接超时时间
+         * 设置连接超时时
          */
         simpleClientHttpRequestFactory.setConnectTimeout(5 * 60 * 1000);
+        simpleClientHttpRequestFactory.setReadTimeout(5 * 10);
 
         return simpleClientHttpRequestFactory;
     }
 
     /**
-     * 设置负载平衡策略-随机匹配
+     * openFeign connectTimeoutUnit and readTimeoutUnit settings
      *
-     * @return
+     * @return Options
      */
     @Bean
-    public IRule iRule() {
-        //随机
-        //IRule iRule = new RandomRule();
-        //轮询
-        IRule iRule = new ZoneAvoidanceRule();
-        return iRule;
-
+    public Request.Options options() {
+        final Request.Options options = new Request.Options(2, TimeUnit.SECONDS,
+                2, TimeUnit.SECONDS,
+                true);
+        return options;
     }
 }

@@ -1,0 +1,7 @@
+
+
+### 扩展接口-查找所有应用
+GET http://{{host}}/getSortedApplications
+
+
+

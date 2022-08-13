@@ -11,6 +11,7 @@ import com.netflix.hystrix.contrib.javanica.conf.HystrixPropertiesManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,8 +23,8 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0
  * @ModifyTime 2020/7/27 11:50:52
  */
-@DefaultProperties(defaultFallback = "defaultFallbackHandler",commandProperties = {
-        @HystrixProperty(name= HystrixPropertiesManager.EXECUTION_ISOLATION_THREAD_TIMEOUT_IN_MILLISECONDS,value = "2000")
+@DefaultProperties(defaultFallback = "defaultFallbackHandler", commandProperties = {
+        @HystrixProperty(name = HystrixPropertiesManager.EXECUTION_ISOLATION_THREAD_TIMEOUT_IN_MILLISECONDS, value = "2000")
 })
 @RestController
 public class Index {
@@ -41,14 +42,14 @@ public class Index {
         return s + LocalDateTime.now();
     }
 
-    @HystrixCommand(fallbackMethod = "itimeoutFallBack",commandProperties = {
-            @HystrixProperty(name= HystrixPropertiesManager.EXECUTION_ISOLATION_THREAD_TIMEOUT_IN_MILLISECONDS,value = "2000")
+    @HystrixCommand(fallbackMethod = "itimeoutFallBack", commandProperties = {
+            @HystrixProperty(name = HystrixPropertiesManager.EXECUTION_ISOLATION_THREAD_TIMEOUT_IN_MILLISECONDS, value = "2000")
     })
     @GetMapping("/itimeout")
-    public String itimeout() {
-        String s = Thread.currentThread().getName() + " 超时调用 ";
+    public String itimeout(@RequestParam(value = "time") long time) {
+        String s = Thread.currentThread().getName() + "itimeout正常调用 ";
         try {
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(time);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -56,17 +57,17 @@ public class Index {
         return s + LocalDateTime.now();
     }
 
-    public String itimeoutFallBack() {
-        String s = Thread.currentThread().getName() + " itimeoutFallBack() ";
-        return s + LocalDateTime.now();
+    public String itimeoutFallBack(int time) {
+        String s = Thread.currentThread().getName() + " itimeout FallBack() ";
+        return "input time:" + time + " " + s + LocalDateTime.now();
     }
 
     @HystrixCommand
     @GetMapping("/itimeout2")
-    public String itimeout2() {
-        String s = Thread.currentThread().getName() + " itimeout2 ";
+    public String itimeout2(@RequestParam(value = "time") long time) {
+        String s = Thread.currentThread().getName() + " itimeout2 正常调用";
         try {
-            TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(time);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

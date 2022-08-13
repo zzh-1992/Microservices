@@ -15,14 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class HelloClientFallback implements HelloClient {
-
-    @Override
-    public String hello() {
-        return "HelloClientFallback hello + 降级处理";
-    }
-
-    @Override
-    public String helloTimeout() {
-        return "HelloClientFallback timeout + 降级处理";
+    public String hello(long time) {
+        return "HelloClientFallback hello + 降级处理 inputTime:" + time;
     }
 }

@@ -5,9 +5,8 @@
 package com.grapefruit.consumer.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -24,13 +23,7 @@ public class UsingOpenFeign {
     HelloClient client;
 
     @RequestMapping("/hello")
-    public String hello() {
-        return client.hello();
-    }
-
-    @FeignClient("grapefruit.provider")
-    interface HelloClient {
-        @RequestMapping(value = "/hello", method = RequestMethod.GET)
-        String hello();
+    public String hello(@RequestParam(value = "time") long time) {
+        return client.hello(time);
     }
 }

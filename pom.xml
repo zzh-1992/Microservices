@@ -16,8 +16,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>a_server_8080</module>
+        <module>a_server_7777</module>
+        <module>a_server_8888</module>
         <module>b_consumer_8081</module>
+        <module>b_consumer_8071_hystrix</module>
         <module>provider</module>
     </modules>
 
@@ -88,6 +90,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.6.3</version>
             </plugin>
         </plugins>
     </build>
